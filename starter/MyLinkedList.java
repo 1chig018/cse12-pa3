@@ -74,19 +74,22 @@ public class MyLinkedList<E> extends AbstractList<E> {
 
     //  Implementation of the MyLinkedList Class
     public MyLinkedList() {
+        head = new Node(null);
+        tail = new Node(null);
         /* Add your implementation here */
-        // TODO
+        head.next = tail;
+        tail.prev = head;
     }
 
     @Override
     public int size() {
         // need to implement the size method
-        return 0; // TODO
+        return size; 
     }
 
     @Override
     public E get(int index) {
-        return (E) null;  // TODO
+        return getNth(index).data;
     }
 
     @Override
@@ -102,25 +105,50 @@ public class MyLinkedList<E> extends AbstractList<E> {
 
     @Override
     public E set(int index, E data) {
-        return (E) null; // TODO
+        if(data == null){
+            throw new NullPointerException();
+        }
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node beforeNode = getNth(index);
+        Node newNode = new Node(data);
+        newNode.next = beforeNode.next;
+        newNode.prev = beforeNode.prev;
+        beforeNode.prev.next = newNode;
+        beforeNode.next.prev = newNode;
+        return (E) beforeNode.data; 
     }
 
     @Override
     public E remove(int index) {
-        return (E) null; // TODO
+        if(index < 0 || index >= size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node beforeNode = getNth(index);
+        beforeNode.prev.next = beforeNode.next;
+        beforeNode.next.prev = beforeNode.prev;
+        size--;
+        return (E) beforeNode.data;
     }
 
     @Override
     public void clear() {
-        /* Add your implementation here */
+        head.next = tail;
+        tail.prev = head;
+        size = 0;
     }
 
     @Override
     public boolean isEmpty() {
-        return true;  // TODO
+        return size == 0;
     }
 
     protected Node getNth(int index) {
-        return (Node) null;  // TODO
+        Node curNode = head.next;
+        for(int i = 0; i < index; i ++){
+            curNode = curNode.next;
+        }
+        return curNode;
     }
 }
